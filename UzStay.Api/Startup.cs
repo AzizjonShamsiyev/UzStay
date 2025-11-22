@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using UzStay.Api.Brokers.Storages;
 
 namespace UzStay.Api
 {
@@ -19,7 +20,10 @@ namespace UzStay.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<StorageBroker>();
             services.AddControllers();
+
+
             services.AddSwaggerGen(option =>
             {
                 option.SwaggerDoc(
