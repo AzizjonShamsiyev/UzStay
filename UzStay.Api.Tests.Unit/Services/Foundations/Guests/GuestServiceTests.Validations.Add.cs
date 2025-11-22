@@ -1,4 +1,5 @@
-﻿using UzStay.Api.Models.Foundations.Guests;
+﻿using Moq;
+using UzStay.Api.Models.Foundations.Guests;
 using UzStay.Api.Models.Foundations.Guests.Exception;
 using Xunit;
 
@@ -13,7 +14,7 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
             Guest nullGuest = null;
             var nullGuestException = new NullGuestException();
 
-            var expectedGuestException =
+            var expectedGuestValidationException =
                 new GuestValidationException(nullGuestException);
 
             //when
@@ -22,6 +23,18 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
             //then
             await Assert.ThrowsAsync<GuestValidationException>(() =>
                 addGuestTask.AsTask());
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(expectedGuestValidationException))),
+                Times.Once);
+            
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertGuestsAsync(It.IsAny<Guest>()),
+                Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+
         }
     }
 }

@@ -1,4 +1,3 @@
-using FluentAssertions.Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +10,7 @@ namespace UzStay.Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration) =>        
+        public Startup(IConfiguration configuration) =>
             Configuration = configuration;
 
 
@@ -25,15 +24,14 @@ namespace UzStay.Api
             services.AddTransient<IStorageBroker, StorageBroker>();
             services.AddControllers();
 
-
             services.AddSwaggerGen(option =>
             {
                 option.SwaggerDoc(
-                    name: "v1", 
-                    info : apiInfo); 
+                    name: "v1",
+                    info: apiInfo);
             });
         }
-        
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -42,7 +40,7 @@ namespace UzStay.Api
                 app.UseSwagger();
 
                 app.UseSwaggerUI(option => option.SwaggerEndpoint(
-                    url: "/swagger/v1/swagger.json", 
+                    url: "/swagger/v1/swagger.json",
                     name: "UzStay.Api v1"));
             }
 

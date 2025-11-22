@@ -1,9 +1,11 @@
 ﻿using Moq;
+using System.Linq.Expressions;
 using Tynamix.ObjectFiller;
 using UzStay.Api.Brokers.Logging;
 using UzStay.Api.Brokers.Storages;
 using UzStay.Api.Models.Foundations.Guests;
 using UzStay.Api.Services.Foundations.Guests;
+using Xeptions;
 
 namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
 {
@@ -20,7 +22,7 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
 
             this.guestService =
                 new GuestService(
-                    storageBroker: this.storageBrokerMock.Object, 
+                    storageBroker: this.storageBrokerMock.Object,
                     loggingBroker: this.loggingBrokerMock.Object);
         }
 
@@ -37,6 +39,15 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
                 .OnType<DateTimeOffset>().Use(date);
 
             return filler;
+        }
+
+        private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException)
+        {
+            return actualException =>
+                actualException.Message == expectedException.Message
+                && actualException.InnerException.Message == expectedException.InnerException.Message
+                && (actualException.InnerException as Xeption).DataEquals(expectedException.InnerException.Data);
+
         }
     }
 }
