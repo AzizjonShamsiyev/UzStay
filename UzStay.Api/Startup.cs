@@ -1,3 +1,4 @@
+using FluentAssertions.Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -21,6 +22,7 @@ namespace UzStay.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<StorageBroker>();
+            services.AddTransient<IStorageBroker, StorageBroker>();
             services.AddControllers();
 
 
