@@ -17,7 +17,7 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
                 new GuestValidationException(nullGuestException);
 
             //when
-            ValueTask<Guest> addGuestTask = this.guestSevice.AddGuestAsync(nullGuest);
+            ValueTask<Guest> addGuestTask = this.guestService.AddGuestAsync(nullGuest);
 
             //then
             await Assert.ThrowsAsync<GuestValidationException>(() =>

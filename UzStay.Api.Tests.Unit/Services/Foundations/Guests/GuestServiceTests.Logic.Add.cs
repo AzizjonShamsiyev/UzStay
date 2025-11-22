@@ -25,7 +25,7 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
                 .ReturnsAsync(storageGuest);
 
             //when
-            Guest actualGuest = await this.guestSevice.AddGuestAsync(inputGuest);
+            Guest actualGuest = await this.guestService.AddGuestAsync(inputGuest);
 
             //then
             actualGuest.Should().BeEquivalentTo(expectedGuest);
