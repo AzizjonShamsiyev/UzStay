@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
-using System.Diagnostics;
 
 namespace UzStay.Api.Controllers
 {
@@ -9,7 +8,7 @@ namespace UzStay.Api.Controllers
     public class HomeController : RESTFulController
     {
         [HttpGet]
-        public ActionResult<string> Get() => 
-            Ok("Hello Mario, the princess is in another castle" );
+        public ActionResult<string> Get() =>
+            Ok("Hello Mario, the princess is in another castle");
     }
 }

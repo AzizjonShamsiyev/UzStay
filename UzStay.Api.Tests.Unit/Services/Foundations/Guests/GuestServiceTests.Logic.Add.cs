@@ -1,10 +1,7 @@
 ﻿using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
-using Tynamix.ObjectFiller;
-using UzStay.Api.Brokers.Storages;
 using UzStay.Api.Models.Foundations.Guests;
-using UzStay.Api.Services.Foundations.Guests;
 using Xunit;
 
 namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
