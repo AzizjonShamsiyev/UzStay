@@ -34,6 +34,7 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
                 broker.InsertGuestsAsync(inputGuest), Times.Once());
 
             this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
