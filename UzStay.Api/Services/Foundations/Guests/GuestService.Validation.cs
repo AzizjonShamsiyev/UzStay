@@ -1,9 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
 using UzStay.Api.Models.Foundations.Guests;
-using UzStay.Api.Models.Foundations.Guests.Exception;
-using static System.Net.Mime.MediaTypeNames;
+using UzStay.Api.Models.Foundations.Guests.Exceptions;
 
 namespace UzStay.Api.Services.Foundations.Guests
 {

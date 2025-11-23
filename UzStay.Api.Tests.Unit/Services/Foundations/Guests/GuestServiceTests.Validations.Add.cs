@@ -1,10 +1,7 @@
-﻿using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-using Moq;
-using Newtonsoft.Json.Linq;
+﻿using Moq;
 using UzStay.Api.Models.Foundations.Guests;
-using UzStay.Api.Models.Foundations.Guests.Exception;
+using UzStay.Api.Models.Foundations.Guests.Exceptions;
 using Xunit;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
 {
