@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.ComponentModel.DataAnnotations;
 using UzStay.Api.Models.Foundations.Guests;
 using UzStay.Api.Models.Foundations.Guests.Exception;
 using static System.Net.Mime.MediaTypeNames;
@@ -17,7 +19,8 @@ namespace UzStay.Api.Services.Foundations.Guests
                 (Rule: IsInvalid(guest.LastName, nameof(Guest.LastName)), Parameter: nameof(Guest.LastName)),
                 (Rule: IsInvalid(guest.DateOfBirth, nameof(Guest.DateOfBirth)), Parameter: nameof(Guest.DateOfBirth)),
                 (Rule: IsInvalid(guest.Email, nameof(Guest.Email)), Parameter: nameof(Guest.Email)),
-                (Rule: IsInvalid(guest.Address, nameof(Guest.Address)), Parameter: nameof(Guest.Address)));
+                (Rule: IsInvalid(guest.Address, nameof(Guest.Address)), Parameter: nameof(Guest.Address)),
+                (Rule: IsInvalid(guest.Gender, nameof(Guest.Gender)), Parameter: nameof(Guest.Gender)));
         }
 
         private static dynamic IsInvalid(Guid Id,string parameterName) => new
@@ -37,6 +40,12 @@ namespace UzStay.Api.Services.Foundations.Guests
             Condition = date == default,
             Message = $"{parameterName} is required"
         };
+
+        private static dynamic IsInvalid(GenderType gender, string parameterName) => new
+        {
+            Condition = Enum.IsDefined(typeof(GenderType), gender) is false,
+            Message = $"{parameterName} is required"
+        };   
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
