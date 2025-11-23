@@ -2,7 +2,6 @@
 using UzStay.Api.Brokers.Logging;
 using UzStay.Api.Brokers.Storages;
 using UzStay.Api.Models.Foundations.Guests;
-using UzStay.Api.Models.Foundations.Guests.Exception;
 
 namespace UzStay.Api.Services.Foundations.Guests
 {
@@ -21,7 +20,7 @@ namespace UzStay.Api.Services.Foundations.Guests
         TryCatch(async () =>
         {
             ValidateGuestNotNull(guest);
-            return await this.storageBroker.InsertGuestsAsync(guest);
+            return await this.storageBroker.InsertGuestAsync(guest);
         });
     }
 }

@@ -18,7 +18,7 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
             Guest expectedGuest = storageGuest.DeepClone();
 
             this.storageBrokerMock.Setup(broker =>
-                broker.InsertGuestsAsync(inputGuest))
+                broker.InsertGuestAsync(inputGuest))
                 .ReturnsAsync(storageGuest);
 
             //when
@@ -28,7 +28,7 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
             actualGuest.Should().BeEquivalentTo(expectedGuest);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertGuestsAsync(inputGuest), Times.Once());
+                broker.InsertGuestAsync(inputGuest), Times.Once());
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
