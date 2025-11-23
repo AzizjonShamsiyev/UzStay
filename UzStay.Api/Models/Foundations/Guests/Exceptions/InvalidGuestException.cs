@@ -1,6 +1,6 @@
 ﻿using Xeptions;
 
-namespace UzStay.Api.Models.Foundations.Guests.Exception
+namespace UzStay.Api.Models.Foundations.Guests.Exceptions
 {
     public class InvalidGuestException : Xeption
     {

@@ -1,5 +1,7 @@
-﻿using Moq;
+﻿using Microsoft.Data.SqlClient;
+using Moq;
 using System.Linq.Expressions;
+using System.Runtime.Serialization;
 using Tynamix.ObjectFiller;
 using UzStay.Api.Brokers.Logging;
 using UzStay.Api.Brokers.Storages;
@@ -34,6 +36,10 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
 
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
+
+        private static SqlException GetSqlError() =>
+            (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
+
 
         private static T GetInvalidEnum<T>()
         {

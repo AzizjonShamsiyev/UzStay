@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using UzStay.Api.Models.Foundations.Guests;
-using UzStay.Api.Models.Foundations.Guests.Exception;
+using UzStay.Api.Models.Foundations.Guests.Exceptions;
 using Xeptions;
 
 namespace UzStay.Api.Services.Foundations.Guests
