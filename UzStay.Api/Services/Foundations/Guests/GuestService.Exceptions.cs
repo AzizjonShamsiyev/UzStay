@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using EFxceptions.Models.Exceptions;
+using Microsoft.Data.SqlClient;
 using System.Threading.Tasks;
 using UzStay.Api.Models.Foundations.Guests;
 using UzStay.Api.Models.Foundations.Guests.Exceptions;
@@ -31,6 +32,13 @@ namespace UzStay.Api.Services.Foundations.Guests
 
                 throw CreateAndLogCriticalDependencyException(failedGuestStorageException);
             }
+            catch (DuplicateKeyException duplicateKeyException)
+            {
+                var alreadyExistGuestException =
+                    new AlreadyExistGuestException(duplicateKeyException);
+
+                throw CreateAndLogDependencyValidationException(alreadyExistGuestException);
+            }
         }
 
         private GuestDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
@@ -42,6 +50,18 @@ namespace UzStay.Api.Services.Foundations.Guests
                 
             return guestDependencyException;
         }
+
+        private GuestDependencyValidationException CreateAndLogDependencyValidationException(
+            Xeption exception)
+        {
+            var guestDependencyValidationException =
+               new GuestDependencyValidationException(exception);
+
+            this.loggingBroker.LogError(guestDependencyValidationException);
+
+            return guestDependencyValidationException;
+        }
+
 
         private GuestValidationException CreateAndLogValidationException(Xeption exception)
         {
