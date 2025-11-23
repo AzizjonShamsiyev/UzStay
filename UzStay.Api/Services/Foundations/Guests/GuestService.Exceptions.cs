@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.Data.SqlClient;
+using System.Threading.Tasks;
 using UzStay.Api.Models.Foundations.Guests;
 using UzStay.Api.Models.Foundations.Guests.Exceptions;
 using Xeptions;
@@ -23,12 +24,32 @@ namespace UzStay.Api.Services.Foundations.Guests
             {
                 throw CreateAndLogValidationException(invalidGuestException);
             }
+            catch (SqlException sqlException)
+            {
+                var failedGuestStorageException = 
+                    new FailedGuestStorageException(sqlException);
+
+                throw CreateAndLogCriticalDependencyException(failedGuestStorageException);
+            }
+        }
+
+        private GuestDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
+        {
+            var guestDependencyException = 
+                new GuestDependencyException(exception);
+
+            this.loggingBroker.LogCritical(guestDependencyException);
+                
+            return guestDependencyException;
         }
 
         private GuestValidationException CreateAndLogValidationException(Xeption exception)
         {
-            var guestValidationException = new GuestValidationException(exception);
+            var guestValidationException = 
+                new GuestValidationException(exception);
+
             this.loggingBroker.LogError(guestValidationException);
+
             return guestValidationException;
         }
 
