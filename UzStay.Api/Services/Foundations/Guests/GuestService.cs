@@ -2,6 +2,7 @@
 using UzStay.Api.Brokers.Logging;
 using UzStay.Api.Brokers.Storages;
 using UzStay.Api.Models.Foundations.Guests;
+using UzStay.Api.Models.Foundations.Guests.Exception;
 
 namespace UzStay.Api.Services.Foundations.Guests
 {
@@ -16,7 +17,24 @@ namespace UzStay.Api.Services.Foundations.Guests
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<Guest> AddGuestAsync(Guest guest) =>
-            await this.storageBroker.InsertGuestsAsync(guest);
+        public async ValueTask<Guest> AddGuestAsync(Guest guest)
+        {
+            try
+            {
+                if (guest is null)
+                    throw new NullGuestException();
+
+                return await this.storageBroker.InsertGuestsAsync(guest);
+            }
+            catch (NullGuestException nullGuestException)
+            {
+                var guestValidationException =
+                    new GuestValidationException(nullGuestException);
+
+                this.loggingBroker.LogError(guestValidationException);
+
+                throw guestValidationException;
+            }
+        }
     }
 }
