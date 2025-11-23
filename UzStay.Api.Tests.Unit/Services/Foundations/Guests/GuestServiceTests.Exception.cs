@@ -3,6 +3,7 @@ using Moq;
 using UzStay.Api.Models.Foundations.Guests.Exceptions;
 using UzStay.Api.Models.Foundations.Guests;
 using Xunit;
+using EFxceptions.Models.Exceptions;
 
 namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
 {
@@ -45,5 +46,43 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
 
+        [Fact]
+        public async Task ShouldThrowDependencyValidationOnAddIfDuplicateKeyErrorOccursAndLogItAsync()
+        {
+            Guest someGuest = CreateRandomGuest();
+            string someMessage = GetRandomString();
+
+            var dublicateKeyException = new DuplicateKeyException(someMessage);
+            
+            var alreadyExistGuestException =
+                new AlreadyExistGuestException(dublicateKeyException);
+
+            var guestDependencyValidationException =
+                new GuestDependencyValidationException(alreadyExistGuestException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.InsertGuestAsync(someGuest))
+                    .ThrowsAsync(dublicateKeyException);
+
+            //when
+            ValueTask<Guest> addGuestTask =
+            this.guestService.AddGuestAsync(someGuest);
+
+            //then
+            await Assert.ThrowsAsync<GuestDependencyValidationException>(() =>
+                addGuestTask.AsTask());
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertGuestAsync(someGuest),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    guestDependencyValidationException))),
+                    Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
