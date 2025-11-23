@@ -5,6 +5,6 @@ namespace UzStay.Api.Brokers.Storages
 {
     public partial interface IStorageBroker
     {
-        ValueTask<Guest> InsertGuestsAsync(Guest guests);
+        ValueTask<Guest> InsertGuestAsync(Guest guests);
     }
 }
