@@ -55,27 +55,27 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
 
             invalidGuestException.AddData(
                 key: nameof(Guest.Id),
-                values: "Id is required");
+                values: $"{nameof(Guest.Id)} is required");
 
             invalidGuestException.AddData(
                 key: nameof(Guest.FirstName),
-                values: "First name is required");
+                values: $"{nameof(Guest.FirstName)} is required");
 
             invalidGuestException.AddData(
                 key: nameof(Guest.LastName),
-                values: "Last name is required");
+                values: $"{nameof(Guest.LastName)} is required");
 
             invalidGuestException.AddData(
                 key: nameof(Guest.DateOfBirth),
-                values: "Date of birth is required");
+                values: $"{nameof(Guest.DateOfBirth)} is required");
 
             invalidGuestException.AddData(
                 key: nameof(Guest.Email),
-                values: "Email is required");
+                values: $"{nameof(Guest.Email)} is required");
 
             invalidGuestException.AddData(
                 key: nameof(Guest.Address),
-                values: "Address is required");
+                values: $"{nameof(Guest.Address)} is required");
 
             var expectedGuestValidationException =
                 new GuestValidationException(invalidGuestException);
