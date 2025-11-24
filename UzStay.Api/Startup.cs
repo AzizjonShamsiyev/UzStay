@@ -4,7 +4,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using UzStay.Api.Brokers.Logging;
 using UzStay.Api.Brokers.Storages;
+using UzStay.Api.Services.Foundations.Guests;
 
 namespace UzStay.Api
 {
@@ -19,9 +21,10 @@ namespace UzStay.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<StorageBroker>();
-            services.AddTransient<IStorageBroker, StorageBroker>();
             services.AddControllers();
+            services.AddDbContext<StorageBroker>();
+            AddBrokers(services);
+            AddFoundationServices(services);
 
             services.AddSwaggerGen(option =>
             {
@@ -50,5 +53,14 @@ namespace UzStay.Api
             app.UseEndpoints(endpoints =>
                 endpoints.MapControllers());
         }
+
+        private void AddBrokers(IServiceCollection services)
+        {
+            services.AddTransient<IStorageBroker, StorageBroker>();
+            services.AddTransient<ILoggingBroker, LoggingBroker>();
+        }
+
+        private void AddFoundationServices(IServiceCollection services) =>
+            services.AddTransient<IGuestService, GuestService>();
     }
 }
