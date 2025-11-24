@@ -28,7 +28,7 @@ namespace UzStay.Api.Services.Foundations.Guests
             }
             catch (SqlException sqlException)
             {
-                var failedGuestStorageException = 
+                var failedGuestStorageException =
                     new FailedGuestStorageException(sqlException);
 
                 throw CreateAndLogCriticalDependencyException(failedGuestStorageException);
@@ -40,9 +40,9 @@ namespace UzStay.Api.Services.Foundations.Guests
 
                 throw CreateAndLogDependencyValidationException(alreadyExistGuestException);
             }
-            catch (Exception exception)   
+            catch (Exception exception)
             {
-                var failedGuestServiceException = 
+                var failedGuestServiceException =
                     new FailedGuestServiceException(exception);
 
                 throw CreateAndLogServiceException(failedGuestServiceException);
@@ -51,11 +51,11 @@ namespace UzStay.Api.Services.Foundations.Guests
 
         private GuestDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
         {
-            var guestDependencyException = 
+            var guestDependencyException =
                 new GuestDependencyException(exception);
 
             this.loggingBroker.LogCritical(guestDependencyException);
-                
+
             return guestDependencyException;
         }
 
@@ -72,7 +72,7 @@ namespace UzStay.Api.Services.Foundations.Guests
 
         private GuestValidationException CreateAndLogValidationException(Xeption exception)
         {
-            var guestValidationException = 
+            var guestValidationException =
                 new GuestValidationException(exception);
 
             this.loggingBroker.LogError(guestValidationException);

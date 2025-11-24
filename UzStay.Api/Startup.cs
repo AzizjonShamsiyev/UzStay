@@ -13,7 +13,6 @@ namespace UzStay.Api
         public Startup(IConfiguration configuration) =>
             Configuration = configuration;
 
-
         public IConfiguration Configuration { get; }
 
         OpenApiInfo apiInfo = new OpenApiInfo { Title = "UzStay.Api", Version = "v1" };

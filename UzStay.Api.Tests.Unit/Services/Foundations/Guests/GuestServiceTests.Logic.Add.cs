@@ -19,7 +19,7 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
 
             this.storageBrokerMock.Setup(broker =>
                 broker.InsertGuestAsync(inputGuest))
-                .ReturnsAsync(storageGuest);
+                    .ReturnsAsync(storageGuest);
 
             //when
             Guest actualGuest = await this.guestService.AddGuestAsync(inputGuest);
