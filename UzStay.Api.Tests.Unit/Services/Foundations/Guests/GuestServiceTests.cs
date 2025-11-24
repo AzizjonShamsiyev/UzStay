@@ -52,7 +52,7 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
                 randomNumber = GetRandomNumber();
             }
 
-            return(T)(object)randomNumber;
+            return (T)(object)randomNumber;
         }
 
         private static Filler<Guest> CreateGuestFiller(DateTimeOffset date)
@@ -68,9 +68,10 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
         {
             return actualException =>
                 actualException.Message == expectedException.Message
-                && actualException.InnerException.Message == expectedException.InnerException.Message
-                && (actualException.InnerException as Xeption).DataEquals(expectedException.InnerException.Data);
-
+                && actualException.InnerException.Message 
+                == expectedException.InnerException.Message
+                && (actualException.InnerException as Xeption)
+                .DataEquals(expectedException.InnerException.Data);
         }
     }
 }

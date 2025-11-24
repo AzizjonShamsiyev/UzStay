@@ -3,9 +3,9 @@ using ADotNet.Models.Pipelines.GithubPipelines.DotNets;
 using ADotNet.Models.Pipelines.GithubPipelines.DotNets.Tasks;
 using ADotNet.Models.Pipelines.GithubPipelines.DotNets.Tasks.SetupDotNetTaskV1s;
 
-var githubPipeline = new GithubPipeline
+var gitHubPipeline = new GithubPipeline
 {
-    Name = "Sheenam Build Pipeline",
+    Name = "UzStay Build Pipeline",
     OnEvents = new Events
     {
         PullRequest = new PullRequestEvent
@@ -36,13 +36,13 @@ var githubPipeline = new GithubPipeline
                     Name = "Setting Up.NET",
                     TargetDotNetVersion = new TargetDotNetVersion
                     {
-                        DotNetVersion = "6.0.412"
+                        DotNetVersion = "8.0.416"
                     }
                 },
 
                 new RestoreTask
                 {
-                    Name = "Restoring Nuget Packages"
+                    Name = "Restoring NuGet Packages"
                 },
 
                 new DotNetBuildTask
@@ -62,5 +62,5 @@ var githubPipeline = new GithubPipeline
 var client = new ADotNetClient();
 
 client.SerializeAndWriteToFile(
-    adoPipeline: githubPipeline,
-    path: "../../../../.github/workflows/dotnet.yml");
+    adoPipeline: gitHubPipeline,
+    path: "../../../../.gitHub/workflows/dotnet.yml");
