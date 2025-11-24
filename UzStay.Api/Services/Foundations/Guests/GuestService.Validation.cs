@@ -20,7 +20,7 @@ namespace UzStay.Api.Services.Foundations.Guests
                 (Rule: IsInvalid(guest.Gender, nameof(Guest.Gender)), Parameter: nameof(Guest.Gender)));
         }
 
-        private static dynamic IsInvalid(Guid Id,string parameterName) => new
+        private static dynamic IsInvalid(Guid Id, string parameterName) => new
         {
             Condition = Id == Guid.Empty,
             Message = $"{parameterName} is required"
@@ -42,7 +42,7 @@ namespace UzStay.Api.Services.Foundations.Guests
         {
             Condition = Enum.IsDefined(typeof(GenderType), gender) is false,
             Message = $"{parameterName} is required"
-        };   
+        };
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
@@ -50,7 +50,7 @@ namespace UzStay.Api.Services.Foundations.Guests
 
             foreach ((dynamic rule, string parameter) in validations)
             {
-                if(rule.Condition)
+                if (rule.Condition)
                 {
                     invalidGuestException.UpsertDataList(
                         key: parameter,
@@ -59,7 +59,6 @@ namespace UzStay.Api.Services.Foundations.Guests
             }
             invalidGuestException.ThrowIfContainsErrors();
         }
-
 
         private void ValidateGuestNotNull(Guest guest)
         {

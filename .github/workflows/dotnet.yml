@@ -1,4 +1,4 @@
-name: Sheenam Build Pipeline
+name: UzStay Build Pipeline
 on:
   push:
     branches:
@@ -15,9 +15,9 @@ jobs:
     - name: Setting Up.NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 6.0.412
+        dotnet-version: 8.0.416
         include-prerelease: false
-    - name: Restoring Nuget Packages
+    - name: Restoring NuGet Packages
       run: dotnet restore
     - name: Building Project
       run: dotnet build --no-restore

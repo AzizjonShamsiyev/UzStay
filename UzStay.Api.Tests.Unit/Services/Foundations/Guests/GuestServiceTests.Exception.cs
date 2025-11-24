@@ -1,10 +1,9 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using EFxceptions.Models.Exceptions;
+using Microsoft.Data.SqlClient;
 using Moq;
-using UzStay.Api.Models.Foundations.Guests.Exceptions;
 using UzStay.Api.Models.Foundations.Guests;
+using UzStay.Api.Models.Foundations.Guests.Exceptions;
 using Xunit;
-using EFxceptions.Models.Exceptions;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 
 namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
 {
@@ -17,7 +16,7 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
             Guest someGuest = CreateRandomGuest();
             SqlException sqlException = GetSqlError();
 
-            var failedGuestStorageException = 
+            var failedGuestStorageException =
                 new FailedGuestStorageException(sqlException);
 
             var expectedGuestDependencyException =
@@ -54,7 +53,7 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
             string someMessage = GetRandomString();
 
             var dublicateKeyException = new DuplicateKeyException(someMessage);
-            
+
             var alreadyExistGuestException =
                 new AlreadyExistGuestException(dublicateKeyException);
 
@@ -93,15 +92,15 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
             Guest someGuest = CreateRandomGuest();
             var serviceException = new Exception();
 
-            var failedGuestServiceException = 
+            var failedGuestServiceException =
                 new FailedGuestServiceException(serviceException);
 
-            var expectedGuestServiceException = 
+            var expectedGuestServiceException =
                 new GuestServiceException(failedGuestServiceException);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.InsertGuestAsync(someGuest))
-                .ThrowsAsync(serviceException);
+                    .ThrowsAsync(serviceException);
 
             //when
             ValueTask<Guest> addGuestTask =

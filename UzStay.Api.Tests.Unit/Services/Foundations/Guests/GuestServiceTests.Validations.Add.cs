@@ -26,8 +26,8 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(expectedGuestValidationException))),
-                Times.Once);
-            
+                    Times.Once);
+
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertGuestAsync(It.IsAny<Guest>()),
                 Times.Never);
@@ -78,7 +78,7 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
 
             var expectedGuestValidationException =
                 new GuestValidationException(invalidGuestException);
-           
+
             //when
             ValueTask<Guest> addGuestTask =
                 this.guestService.AddGuestAsync(invalidGuest);
@@ -88,13 +88,13 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
                 addGuestTask.AsTask());
 
             this.loggingBrokerMock.Verify(broker =>
-             broker.LogError(It.Is(SameExceptionAs(
-              expectedGuestValidationException))),
-               Times.Once);
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedGuestValidationException))),
+                    Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-             broker.InsertGuestAsync(It.IsAny<Guest>()),
-              Times.Never);
+                broker.InsertGuestAsync(It.IsAny<Guest>()),
+                    Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
@@ -125,12 +125,12 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
-                expectedGuestValidationException))),
-                Times.Once);
+                    expectedGuestValidationException))),
+                    Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertGuestAsync(It.IsAny<Guest>()),
-                Times.Never);
+                    Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
