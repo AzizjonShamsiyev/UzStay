@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using UzStay.Api.Brokers.Logging;
 using UzStay.Api.Brokers.Storages;
 using UzStay.Api.Models.Foundations.Guests;
@@ -23,5 +24,8 @@ namespace UzStay.Api.Services.Foundations.Guests
 
             return await this.storageBroker.InsertGuestAsync(guest);
         });
+
+        public IQueryable<Guest> RetrieveAllGuests() =>
+            this.storageBroker.SelectAllGuests();
     }
 }

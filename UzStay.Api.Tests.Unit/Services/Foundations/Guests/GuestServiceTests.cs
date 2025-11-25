@@ -43,6 +43,16 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
 
+        private static IQueryable<Guest> CreateRandomGuests()
+        {
+            int guestsCount = GetRandomNumber();
+
+            return CreateGuestFiller(
+                    date: GetRandomDateTimeOffset())
+                .Create(guestsCount)
+                .AsQueryable();
+        }
+
         private static T GetInvalidEnum<T>()
         {
             int randomNumber = GetRandomNumber();
