@@ -22,9 +22,7 @@ namespace UzStay.Api.Brokers.Storages
         public IQueryable<Guest> SelectAllGuests() => 
             this.Guests.AsNoTracking();
 
-        public ValueTask<Guest> SelectGuestByIdAsync(Guid guestId)
-        {
-            throw new System.NotImplementedException();
-        }
+        public ValueTask<Guest> SelectGuestByIdAsync(Guid guestId) =>
+            this.Guests.FindAsync(guestId);
     }
 }
