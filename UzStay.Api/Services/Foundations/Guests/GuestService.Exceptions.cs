@@ -40,6 +40,10 @@ namespace UzStay.Api.Services.Foundations.Guests
 
                 throw CreateAndLogDependencyValidationException(alreadyExistGuestException);
             }
+            catch(NotFoundGuestException notFoundGuestException)
+            {
+                throw CreateAndLogValidationException(notFoundGuestException);
+            }
             catch (Exception exception)
             {
                 var failedGuestServiceException =
@@ -70,7 +74,8 @@ namespace UzStay.Api.Services.Foundations.Guests
             return guestDependencyValidationException;
         }
 
-        private GuestValidationException CreateAndLogValidationException(Xeption exception)
+        private GuestValidationException CreateAndLogValidationException(
+            Xeption exception)
         {
             var guestValidationException =
                 new GuestValidationException(exception);

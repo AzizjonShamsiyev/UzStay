@@ -14,7 +14,7 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
         {
             //given
             Guest someGuest = CreateRandomGuest();
-            SqlException sqlException = GetSqlError();
+            SqlException sqlException = GetSqlException();
 
             var failedGuestStorageException =
                 new FailedGuestStorageException(sqlException);
@@ -23,12 +23,13 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
                 new GuestDependencyException(failedGuestStorageException);
 
             this.storageBrokerMock.Setup(broker =>
-             broker.InsertGuestAsync(someGuest))
-              .ThrowsAsync(sqlException);
+                broker.InsertGuestAsync(someGuest))
+                    .ThrowsAsync(sqlException);
 
             //when
             ValueTask<Guest> addGuestTask =
                 this.guestService.AddGuestAsync(someGuest);
+
             //then
             await Assert.ThrowsAsync<GuestDependencyException>(() =>
                 addGuestTask.AsTask());
