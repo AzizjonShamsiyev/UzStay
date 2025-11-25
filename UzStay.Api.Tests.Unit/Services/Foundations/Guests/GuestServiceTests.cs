@@ -37,7 +37,7 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
 
-        private static SqlException GetSqlError() =>
+        private static SqlException GetSqlException() =>
             (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
 
         private static string GetRandomString() =>
