@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using UzStay.Api.Models.Foundations.Guests;
 
@@ -8,5 +9,6 @@ namespace UzStay.Api.Brokers.Storages
     {
         ValueTask<Guest> InsertGuestAsync(Guest guests);
         IQueryable<Guest> SelectAllGuests();
+        ValueTask<Guest> SelectGuestByIdAsync(Guid guestId);
     }
 }
