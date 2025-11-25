@@ -70,7 +70,8 @@ namespace UzStay.Api.Services.Foundations.Guests
             return guestDependencyValidationException;
         }
 
-        private GuestValidationException CreateAndLogValidationException(Xeption exception)
+        private GuestValidationException CreateAndLogValidationException(
+            Xeption exception)
         {
             var guestValidationException =
                 new GuestValidationException(exception);
