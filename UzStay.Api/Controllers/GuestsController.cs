@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
+using System.Linq;
 using System.Threading.Tasks;
 using UzStay.Api.Models.Foundations.Guests;
 using UzStay.Api.Models.Foundations.Guests.Exceptions;
@@ -8,7 +9,7 @@ using UzStay.Api.Services.Foundations.Guests;
 namespace UzStay.Api.Controllers
 {
     [ApiController]
-    [Route("api / [controller]")]
+    [Route("api/[controller]")]
     public class GuestsController : RESTFulController
     {
         private readonly IGuestService guestService;
@@ -48,6 +49,15 @@ namespace UzStay.Api.Controllers
             {
                 return InternalServerError(guestServiceException.InnerException);
             }
+        }
+
+        [HttpGet]
+        public ActionResult<IQueryable<Guest>> GetAllGuests()
+        {
+            IQueryable<Guest> guests =
+                this.guestService.RetrieveAllGuests();
+
+            return Ok(guests);
         }
     }
 }
