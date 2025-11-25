@@ -14,7 +14,7 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
         {
             //given
             Guest someGuest = CreateRandomGuest();
-            SqlException sqlException = GetSqlError();
+            SqlException sqlException = GetSqlException();
 
             var failedGuestStorageException =
                 new FailedGuestStorageException(sqlException);
