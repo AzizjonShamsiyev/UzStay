@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using UzStay.Api.Brokers.Logging;
 using UzStay.Api.Brokers.Storages;
@@ -27,5 +28,10 @@ namespace UzStay.Api.Services.Foundations.Guests
 
         public IQueryable<Guest> RetrieveAllGuests() =>
             this.storageBroker.SelectAllGuests();
+
+        public ValueTask<Guest> RetrieveGuestByIdAsync(Guid guestId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

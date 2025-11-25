@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using UzStay.Api.Models.Foundations.Guests;
@@ -20,5 +21,10 @@ namespace UzStay.Api.Brokers.Storages
 
         public IQueryable<Guest> SelectAllGuests() => 
             this.Guests.AsNoTracking();
+
+        public ValueTask<Guest> SelectGuestByIdAsync(Guid guestId)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
