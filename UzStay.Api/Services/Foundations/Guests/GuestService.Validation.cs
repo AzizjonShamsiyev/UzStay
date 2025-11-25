@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Hosting;
+using System;
 using UzStay.Api.Models.Foundations.Guests;
 using UzStay.Api.Models.Foundations.Guests.Exceptions;
 
@@ -18,6 +19,21 @@ namespace UzStay.Api.Services.Foundations.Guests
                 (Rule: IsInvalid(guest.Email, nameof(Guest.Email)), Parameter: nameof(Guest.Email)),
                 (Rule: IsInvalid(guest.Address, nameof(Guest.Address)), Parameter: nameof(Guest.Address)),
                 (Rule: IsInvalid(guest.Gender, nameof(Guest.Gender)), Parameter: nameof(Guest.Gender)));
+        }
+
+        public void ValidateGuestId(Guid guestId) =>
+           Validate((Rule: IsInvalid(guestId,nameof(Guest.Id)), Parameter: nameof(Guest.Id)));
+
+        private void ValidateGuestNotNull(Guest guest)
+        {
+            if (guest is null)
+                throw new NullGuestException();
+        }
+
+        private void ValidateStorageGuest(Guest maybeGuest, Guid guestId)
+        {
+            if (maybeGuest is null)
+                throw new NotFoundGuestException(guestId);
         }
 
         private static dynamic IsInvalid(Guid Id, string parameterName) => new
@@ -58,12 +74,6 @@ namespace UzStay.Api.Services.Foundations.Guests
                 }
             }
             invalidGuestException.ThrowIfContainsErrors();
-        }
-
-        private void ValidateGuestNotNull(Guest guest)
-        {
-            if (guest is null)
-                throw new NullGuestException();
         }
     }
 }
