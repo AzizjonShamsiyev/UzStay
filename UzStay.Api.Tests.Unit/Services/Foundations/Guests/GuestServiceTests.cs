@@ -40,6 +40,9 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
         private static SqlException GetSqlException() =>
             (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
 
+        private static string GetRandomMessage() =>
+            new MnemonicString(wordCount: GetRandomNumber()).GetValue();
+
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
 
