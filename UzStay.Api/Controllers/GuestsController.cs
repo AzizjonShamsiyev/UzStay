@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 using RESTFulSense.Controllers;
 using System;
 using System.Linq;
@@ -45,21 +44,32 @@ namespace UzStay.Api.Controllers
             }
             catch (GuestDependencyException guestDependencyException)
             {
-                return InternalServerError(guestDependencyException.InnerException);
+                return InternalServerError(guestDependencyException);
             }
             catch (GuestServiceException guestServiceException)
             {
-                return InternalServerError(guestServiceException.InnerException);
+                return InternalServerError(guestServiceException);
             }
         }
 
         [HttpGet]
         public ActionResult<IQueryable<Guest>> GetAllGuests()
         {
-            IQueryable<Guest> guests =
-                this.guestService.RetrieveAllGuests();
+            try
+            {
+                IQueryable<Guest> guests =
+                    this.guestService.RetrieveAllGuests();
 
-            return Ok(guests);
+                return Ok(guests);
+            }
+            catch (GuestDependencyException guestDependencyException)
+            {
+                return InternalServerError(guestDependencyException.InnerException);
+            }
+            catch (GuestServiceException guestServiceException)
+            {
+                return InternalServerError(guestServiceException.InnerException);
+            }
         }
 
         [HttpGet("{guestId}")]
