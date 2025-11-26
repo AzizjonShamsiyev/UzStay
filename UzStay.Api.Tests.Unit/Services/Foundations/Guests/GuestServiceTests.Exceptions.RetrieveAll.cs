@@ -49,5 +49,47 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public void ShouldThrowServiceExceptionOnRetrieveAllIfServiceErrorOccursAndLogIt()
+        {
+            //given
+            string exceptionMessage = GetRandomMessage();
+            var serviceException = new Exception(exceptionMessage);
+
+            var failedGuestServiceException = 
+                new FailedGuestServiceException(serviceException);
+
+            var expectedGuestServiceException =
+                new GuestServiceException(failedGuestServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectAllGuests())
+                    .Throws(serviceException);
+
+            //when
+            Action retrieveGuestAllGuestsAction = () =>
+                this.guestService.RetrieveAllGuests();
+
+            GuestServiceException actualGuestServiceException = 
+                Assert.Throws<GuestServiceException>(
+                    retrieveGuestAllGuestsAction);
+
+            //then
+            actualGuestServiceException.Should().BeEquivalentTo(
+                expectedGuestServiceException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectAllGuests(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedGuestServiceException))),
+                        Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
