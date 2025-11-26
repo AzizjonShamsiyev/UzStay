@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using RESTFulSense.Controllers;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using UzStay.Api.Models.Foundations.Guests;
@@ -24,16 +26,16 @@ namespace UzStay.Api.Controllers
         {
             try
             {
-                Guest postedGuest = 
+                Guest postedGuest =
                     await this.guestService.AddGuestAsync(guest);
                 return Created(postedGuest);
             }
-            catch(GuestValidationException guestValidationException)
+            catch (GuestValidationException guestValidationException)
             {
                 return BadRequest(guestValidationException.InnerException);
             }
-		    catch (GuestDependencyValidationException guestDependencyValidationException)
-			    when(guestDependencyValidationException.InnerException is AlreadyExistGuestException)
+            catch (GuestDependencyValidationException guestDependencyValidationException)
+                when (guestDependencyValidationException.InnerException is AlreadyExistGuestException)
             {
                 return Conflict(guestDependencyValidationException.InnerException);
             }
@@ -41,11 +43,11 @@ namespace UzStay.Api.Controllers
             {
                 return BadRequest(guestDependencyValidationException.InnerException);
             }
-            catch(GuestDependencyException guestDependencyException)
+            catch (GuestDependencyException guestDependencyException)
             {
                 return InternalServerError(guestDependencyException.InnerException);
             }
-            catch(GuestServiceException guestServiceException)
+            catch (GuestServiceException guestServiceException)
             {
                 return InternalServerError(guestServiceException.InnerException);
             }
@@ -58,6 +60,34 @@ namespace UzStay.Api.Controllers
                 this.guestService.RetrieveAllGuests();
 
             return Ok(guests);
+        }
+
+        [HttpGet("{guestId}")]
+        public async ValueTask<ActionResult<Guest>> GetGuestByIdAsync(Guid guestId)
+        {
+            try
+            {
+                Guest guest = await this.guestService.RetrieveGuestByIdAsync(guestId);
+
+                return Ok(guest);
+            }
+            catch (GuestValidationException guestValidationException)
+                when (guestValidationException.InnerException is NotFoundGuestException)
+            {
+                return NotFound(guestValidationException.InnerException);
+            }
+            catch (GuestValidationException guestValidationException)
+            {
+                return BadRequest(guestValidationException.InnerException);
+            }
+            catch (GuestDependencyException guestDependencyException)
+            {
+                return InternalServerError(guestDependencyException);
+            }
+            catch (GuestServiceException guestServiceException)
+            {
+                return InternalServerError(guestServiceException);
+            }
         }
     }
 }
