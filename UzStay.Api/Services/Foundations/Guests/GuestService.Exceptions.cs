@@ -68,6 +68,13 @@ namespace UzStay.Api.Services.Foundations.Guests
                     new FailedGuestStorageException(sqlException);
                 throw CreateAndLogCriticalDependencyException(failedGuestStorageException);
             }
+            catch (Exception exception)
+            {
+                var failedGuestServiceException =
+                    new FailedGuestServiceException(exception);
+
+                throw CreateAndLogServiceException(failedGuestServiceException);
+            }
         }
 
         private GuestDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
