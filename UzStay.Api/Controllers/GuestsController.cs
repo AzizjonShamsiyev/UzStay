@@ -64,11 +64,11 @@ namespace UzStay.Api.Controllers
             }
             catch (GuestDependencyException guestDependencyException)
             {
-                return InternalServerError(guestDependencyException.InnerException);
+                return InternalServerError(guestDependencyException );
             }
             catch (GuestServiceException guestServiceException)
             {
-                return InternalServerError(guestServiceException.InnerException);
+                return InternalServerError(guestServiceException);
             }
         }
 
