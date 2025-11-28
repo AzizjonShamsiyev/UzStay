@@ -24,5 +24,14 @@ namespace UzStay.Api.Brokers.Storages
 
         public ValueTask<Guest> SelectGuestByIdAsync(Guid guestId) =>
             this.Guests.FindAsync(guestId);
+
+        public async ValueTask<Guest> UpdateGuestAsync(Guest guest)
+        {
+            using var broker = new StorageBroker(this.configuration);
+            EntityEntry<Guest> guestEntityEntry = broker.Guests.Update(guest);
+            await broker.SaveChangesAsync();
+
+            return guestEntityEntry.Entity;
+        }
     }
 }
