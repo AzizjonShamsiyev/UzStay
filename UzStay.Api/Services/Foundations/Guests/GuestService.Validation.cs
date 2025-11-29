@@ -21,6 +21,11 @@ namespace UzStay.Api.Services.Foundations.Guests
                 (Rule: IsInvalid(guest.Gender, nameof(Guest.Gender)), Parameter: nameof(Guest.Gender)));
         }
 
+        private void ValidateGuestOnModify(Guest guest)
+        {
+            ValidateGuestNotNull(guest);
+        }
+
         public void ValidateGuestId(Guid guestId) =>
            Validate((Rule: IsInvalid(guestId,nameof(Guest.Id)), Parameter: nameof(Guest.Id)));
 
