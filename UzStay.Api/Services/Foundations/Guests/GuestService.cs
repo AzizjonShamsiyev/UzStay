@@ -26,6 +26,11 @@ namespace UzStay.Api.Services.Foundations.Guests
             return await this.storageBroker.InsertGuestAsync(guest);
         });
 
+        public ValueTask<Guest> ModifyGuestAsync(Guest guest)
+        {
+            throw new NotImplementedException();
+        }
+
         public IQueryable<Guest> RetrieveAllGuests() =>
         TryCatch(() => this.storageBroker.SelectAllGuests());
 

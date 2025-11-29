@@ -10,5 +10,6 @@ namespace UzStay.Api.Services.Foundations.Guests
         ValueTask<Guest> AddGuestAsync(Guest guest);
         IQueryable<Guest> RetrieveAllGuests();
         ValueTask<Guest> RetrieveGuestByIdAsync(Guid guestId);
+        ValueTask<Guest> ModifyGuestAsync(Guest guest);
     }
 }
