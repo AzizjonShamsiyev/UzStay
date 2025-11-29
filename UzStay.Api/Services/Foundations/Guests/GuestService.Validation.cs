@@ -24,6 +24,15 @@ namespace UzStay.Api.Services.Foundations.Guests
         private void ValidateGuestOnModify(Guest guest)
         {
             ValidateGuestNotNull(guest);
+
+            Validate(
+                (Rule: IsInvalid(guest.Id, nameof(Guest.Id)), Parameter: nameof(Guest.Id)),
+                (Rule: IsInvalid(guest.FirstName, nameof(Guest.FirstName)), Parameter: nameof(Guest.FirstName)),
+                (Rule: IsInvalid(guest.LastName, nameof(Guest.LastName)), Parameter: nameof(Guest.LastName)),
+                (Rule: IsInvalid(guest.DateOfBirth, nameof(Guest.DateOfBirth)), Parameter: nameof(Guest.DateOfBirth)),
+                (Rule: IsInvalid(guest.Email, nameof(Guest.Email)), Parameter: nameof(Guest.Email)),
+                (Rule: IsInvalid(guest.Address, nameof(Guest.Address)), Parameter: nameof(Guest.Address)),
+                (Rule: IsInvalid(guest.Gender, nameof(Guest.Gender)), Parameter: nameof(Guest.Gender)));
         }
 
         public void ValidateGuestId(Guid guestId) =>
