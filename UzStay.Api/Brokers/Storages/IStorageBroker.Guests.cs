@@ -11,5 +11,6 @@ namespace UzStay.Api.Brokers.Storages
         IQueryable<Guest> SelectAllGuests();
         ValueTask<Guest> SelectGuestByIdAsync(Guid guestId);
         ValueTask<Guest> UpdateGuestAsync(Guest guest);
+        ValueTask<Guest> DeleteGuestAsync(Guest guest);
     }
 }
