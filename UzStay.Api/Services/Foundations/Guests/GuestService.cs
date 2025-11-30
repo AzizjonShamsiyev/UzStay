@@ -31,6 +31,11 @@ namespace UzStay.Api.Services.Foundations.Guests
         {
             ValidateGuestOnModify(guest);
 
+            Guest maybeGuest =
+                await this.storageBroker.SelectGuestByIdAsync(guest.Id);
+
+            ValidateStorageGuest(maybeGuest, guest.Id);
+
             return await this.storageBroker.UpdateGuestAsync(guest);
         });
 
