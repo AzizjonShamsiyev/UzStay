@@ -35,6 +35,9 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
         private static Guest CreateRandomGuest() =>
             CreateGuestFiller(date: GetRandomDateTimeOffset()).Create();
 
+        private static Guest CreateRandomGuest(DateTimeOffset dates) =>
+            CreateGuestFiller(date: dates).Create();
+
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: new DateTime()).GetValue();
 
