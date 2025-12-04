@@ -12,5 +12,7 @@ namespace UzStay.Api.Models.Foundations.Guests
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
         public GenderType Gender { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
+        public DateTimeOffset UpdatedDate { get; set; }
     }
 }
