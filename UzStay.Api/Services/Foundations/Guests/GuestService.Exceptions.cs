@@ -1,6 +1,5 @@
 ﻿using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Hosting;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,8 +11,8 @@ namespace UzStay.Api.Services.Foundations.Guests
 {
     public partial class GuestService
     {
-        private delegate IQueryable<Guest> ReturningGuestsFunction();
         private delegate ValueTask<Guest> ReturningGuestFunction();
+        private delegate IQueryable<Guest> ReturningGuestsFunction();
 
         private async ValueTask<Guest> TryCatch(ReturningGuestFunction returningGuestFunction)
         {
@@ -29,6 +28,10 @@ namespace UzStay.Api.Services.Foundations.Guests
             {
                 throw CreateAndLogValidationException(invalidGuestException);
             }
+            catch(NotFoundGuestException notFoundGuestException)
+            {
+                throw CreateAndLogValidationException(notFoundGuestException);
+            }
             catch (SqlException sqlException)
             {
                 var failedGuestStorageException =
@@ -42,10 +45,6 @@ namespace UzStay.Api.Services.Foundations.Guests
                     new AlreadyExistGuestException(duplicateKeyException);
 
                 throw CreateAndLogDependencyValidationException(alreadyExistGuestException);
-            }
-            catch(NotFoundGuestException notFoundGuestException)
-            {
-                throw CreateAndLogValidationException(notFoundGuestException);
             }
             catch (Exception exception)
             {

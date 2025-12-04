@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Hosting;
-using System;
+﻿using System;
 using UzStay.Api.Models.Foundations.Guests;
 using UzStay.Api.Models.Foundations.Guests.Exceptions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace UzStay.Api.Services.Foundations.Guests
 {
@@ -9,7 +9,7 @@ namespace UzStay.Api.Services.Foundations.Guests
     {
         private void ValidateGuestOnAdd(Guest guest)
         {
-            ValidateGuestNotNull(guest);
+            ValidateGuestIsNotNull(guest);
 
             Validate(
                 (Rule: IsInvalid(guest.Id, nameof(Guest.Id)), Parameter: nameof(Guest.Id)),
@@ -18,12 +18,20 @@ namespace UzStay.Api.Services.Foundations.Guests
                 (Rule: IsInvalid(guest.DateOfBirth, nameof(Guest.DateOfBirth)), Parameter: nameof(Guest.DateOfBirth)),
                 (Rule: IsInvalid(guest.Email, nameof(Guest.Email)), Parameter: nameof(Guest.Email)),
                 (Rule: IsInvalid(guest.Address, nameof(Guest.Address)), Parameter: nameof(Guest.Address)),
-                (Rule: IsInvalid(guest.Gender, nameof(Guest.Gender)), Parameter: nameof(Guest.Gender)));
+                (Rule: IsInvalid(guest.Gender, nameof(Guest.Gender)), Parameter: nameof(Guest.Gender)),
+
+                (Rule: IsNotSame(
+                    firstDate: guest.UpdatedDate,
+                    secondDate: guest.CreatedDate,
+                    secondDateName: nameof(Guest.CreatedDate)),
+                Parameter: nameof(Guest.UpdatedDate)),
+
+                (Rule: IsNotRecent(guest.CreatedDate), Parameter: nameof(Guest.CreatedDate))); 
         }
 
         private void ValidateGuestOnModify(Guest guest)
         {
-            ValidateGuestNotNull(guest);
+            ValidateGuestIsNotNull(guest);
 
             Validate(
                 (Rule: IsInvalid(guest.Id, nameof(Guest.Id)), Parameter: nameof(Guest.Id)),
@@ -36,9 +44,9 @@ namespace UzStay.Api.Services.Foundations.Guests
         }
 
         public void ValidateGuestId(Guid guestId) =>
-           Validate((Rule: IsInvalid(guestId,nameof(Guest.Id)), Parameter: nameof(Guest.Id)));
+           Validate((Rule: IsInvalid(guestId, nameof(Guest.Id)), Parameter: nameof(Guest.Id)));
 
-        private void ValidateGuestNotNull(Guest guest)
+        private void ValidateGuestIsNotNull(Guest guest)
         {
             if (guest is null)
                 throw new NullGuestException();
@@ -73,6 +81,32 @@ namespace UzStay.Api.Services.Foundations.Guests
             Condition = Enum.IsDefined(typeof(GenderType), gender) is false,
             Message = $"{parameterName} is required"
         };
+
+        private static dynamic IsNotSame(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string secondDateName) => new
+            {
+                Condition = firstDate != secondDate,
+                Message = $"Date is not the same as {secondDateName}"
+            };
+
+        private dynamic IsNotRecent(DateTimeOffset date) => new
+        {
+            Condition = IsDateNotRecent(date),
+            Message = "Date is not recent"
+        };
+
+        private bool IsDateNotRecent(DateTimeOffset date)
+        {
+            DateTimeOffset currentDateTime =
+                this.dateTimeBroker.GetCurrentDateTimeOffset();
+
+            TimeSpan timeDifference = currentDateTime.Subtract(date);
+            TimeSpan oneMinute = TimeSpan.FromMinutes(1);
+
+            return timeDifference.Duration() > oneMinute;
+        }
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
