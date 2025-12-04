@@ -3,6 +3,7 @@ using Moq;
 using UzStay.Api.Models.Foundations.Guests;
 using UzStay.Api.Models.Foundations.Guests.Exceptions;
 using Xunit;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
 {
@@ -192,6 +193,63 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTimeOffset(),
                     Times.Once);
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedGuestValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertGuestAsync(It.IsAny<Guest>()),
+                    Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Theory]
+        [MemberData(nameof(MinutesBeforeOrAfter))]
+        public async Task ShouldThrowValidationExceptionOnAddIfCreatedDateIsNotRecentAndLogItAsync(
+            int minutesBeforeOrAfter)
+        {
+            //given
+            DateTimeOffset randomDateTime =
+                GetRandomDateTimeOffset();
+
+            DateTimeOffset invalidDateTime =
+                randomDateTime.AddMinutes(minutesBeforeOrAfter);
+
+            Guest randomGuest = CreateRandomGuest(invalidDateTime);
+            Guest invalidGuest = randomGuest;
+
+            var invalidGuestException =
+                new InvalidGuestException();
+
+            invalidGuestException.AddData(
+                key: nameof(Guest.CreatedDate),
+                values: "Date is not recent");
+
+            var expectedGuestValidationException =
+                new GuestValidationException(invalidGuestException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset())
+                    .Returns(randomDateTime);
+            //when
+            ValueTask<Guest> addGuestTask =
+                this.guestService.AddGuestAsync(invalidGuest);
+
+            GuestValidationException actualGuestValidationException =
+                await Assert.ThrowsAsync<GuestValidationException>(
+                    addGuestTask.AsTask);
+            //then
+            actualGuestValidationException.Should()
+                .BeEquivalentTo(expectedGuestValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(),
+                    Times.Once);
+
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedGuestValidationException))),

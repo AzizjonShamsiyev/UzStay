@@ -9,6 +9,7 @@ using UzStay.Api.Brokers.Storages;
 using UzStay.Api.Models.Foundations.Guests;
 using UzStay.Api.Services.Foundations.Guests;
 using Xeptions;
+using Xunit;
 
 namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
 {
@@ -32,6 +33,18 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
                     dateTimeBroker: this.dateTimeBrokerMock.Object);
         }
 
+        public static TheoryData<int> MinutesBeforeOrAfter()
+        {
+            int randomNumber = GetRandomNumber();
+            int randomNegativeNumber = GetRandomNegativeNumber();
+
+            return new TheoryData<int>
+            {
+                randomNumber,
+                randomNegativeNumber
+            };
+        }
+
         private static Guest CreateRandomGuest() =>
             CreateGuestFiller(date: GetRandomDateTimeOffset()).Create();
 
@@ -43,6 +56,9 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
 
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 9).GetValue();
+
+        private static int GetRandomNegativeNumber() =>
+            -1 * new IntRange(min: 2, max: 10).GetValue();
 
         private static SqlException GetSqlException() =>
             (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
