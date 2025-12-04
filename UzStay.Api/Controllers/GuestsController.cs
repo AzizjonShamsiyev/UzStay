@@ -15,10 +15,8 @@ namespace UzStay.Api.Controllers
     {
         private readonly IGuestService guestService;
 
-        public GuestsController(IGuestService guestService)
-        {
+        public GuestsController(IGuestService guestService) =>
             this.guestService = guestService;
-        }
 
         [HttpPost]
         public async ValueTask<ActionResult<Guest>> PostGuestAsync(Guest guest)
@@ -39,8 +37,9 @@ namespace UzStay.Api.Controllers
                 return Conflict(guestDependencyValidationException.InnerException);
             }
             catch (GuestDependencyValidationException guestDependencyValidationException)
+                when (guestDependencyValidationException.InnerException is InvalidGuestReferenceException)
             {
-                return BadRequest(guestDependencyValidationException.InnerException);
+                return FailedDependency(guestDependencyValidationException.InnerException);
             }
             catch (GuestDependencyException guestDependencyException)
             {
