@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Force.DeepCloner;
+using Microsoft.Data.SqlClient;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -53,6 +54,53 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowCriticalDependencyExceptionOnModifyIfSqlUpdateErrorOccursAndLogItAsync()
+        {
+            // given
+            Guest inputGuest = CreateRandomGuest();
+            Guest storageGuest = inputGuest.DeepClone();
+            SqlException sqlException = GetSqlException();
+
+            var failedGuestStorageException =
+                new FailedGuestStorageException(sqlException);
+
+            var expectedGuestDependencyException =
+                new GuestDependencyException(failedGuestStorageException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectGuestByIdAsync(inputGuest.Id))
+                    .ReturnsAsync(storageGuest);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.UpdateGuestAsync(inputGuest))
+                    .ThrowsAsync(sqlException);
+
+            // when
+            ValueTask<Guest> modifyGuestTask =
+                this.guestService.ModifyGuestAsync(inputGuest);
+
+            // then
+            await Assert.ThrowsAsync<GuestDependencyException>(() =>
+                modifyGuestTask.AsTask());
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectGuestByIdAsync(inputGuest.Id),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdateGuestAsync(inputGuest),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogCritical(It.Is(SameExceptionAs(
+                    expectedGuestDependencyException))),
+                        Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
 
     }
