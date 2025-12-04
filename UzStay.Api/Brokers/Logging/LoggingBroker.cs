@@ -7,6 +7,18 @@ namespace UzStay.Api.Brokers.Logging
     {
         private readonly ILogger<LoggingBroker> logger;
 
+        public void LogInformation(string message) =>
+            this.logger.LogInformation(message);
+
+        public void LogTrace(string message) =>
+            this.logger.LogTrace(message);
+
+        public void LogDebug(string message) =>
+            this.logger.LogDebug(message);
+
+        public void LogWarning(string message) =>
+            this.logger.LogWarning(message);
+
         public LoggingBroker(ILogger<LoggingBroker> logger) =>
             this.logger = logger;
 
@@ -15,6 +27,5 @@ namespace UzStay.Api.Brokers.Logging
 
         public void LogCritical(Exception exception) =>
             this.logger.LogCritical(exception, exception.Message);
-
     }
 }
