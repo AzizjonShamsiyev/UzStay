@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using UzStay.Api.Brokers.DateTimes;
 using UzStay.Api.Brokers.Logging;
 using UzStay.Api.Brokers.Storages;
 using UzStay.Api.Models.Foundations.Guests;
@@ -11,10 +12,15 @@ namespace UzStay.Api.Services.Foundations.Guests
     {
         private readonly IStorageBroker storageBroker;
         private readonly ILoggingBroker loggingBroker;
+        private readonly IDateTimeBroker dateTimeBroker;
 
-        public GuestService(IStorageBroker storageBroker, ILoggingBroker loggingBroker)
+        public GuestService(
+            IStorageBroker storageBroker, 
+            IDateTimeBroker dateTimeBroker,
+            ILoggingBroker loggingBroker)
         {
             this.storageBroker = storageBroker;
+            this.dateTimeBroker = dateTimeBroker;
             this.loggingBroker = loggingBroker;
         }
 

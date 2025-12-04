@@ -14,7 +14,7 @@ namespace UzStay.Api.Brokers.Storages
         public async ValueTask<Guest> InsertGuestAsync(Guest guest) =>
             await InsertAsync(guest);
 
-        public async Task<IQueryable<Guest>> SelectAllGuests() =>
+        public IQueryable<Guest> SelectAllGuests() =>
             SelectAll<Guest>();
 
         public async ValueTask<Guest> SelectGuestByIdAsync(Guid guestId) =>
