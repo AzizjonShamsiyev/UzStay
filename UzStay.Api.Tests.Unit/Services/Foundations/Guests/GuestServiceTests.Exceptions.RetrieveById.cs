@@ -22,7 +22,7 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
             SqlException sqlException = GetSqlException();
 
             var failedGuestStorageException =
-            new FailedGuestStorageException(sqlException);
+                new FailedGuestStorageException(sqlException);
 
             var expectedGuestDependencyException =
                 new GuestDependencyException(failedGuestStorageException);
@@ -43,17 +43,18 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
             actualGuestDependencyException.Should().BeEquivalentTo(
                 expectedGuestDependencyException);
 
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectGuestByIdAsync(someGuestId),
+                    Times.Once);
+
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCritical(It.Is(SameExceptionAs(
                     expectedGuestDependencyException))),
                         Times.Once);
 
-            this.storageBrokerMock.Verify(broker =>
-                broker.SelectGuestByIdAsync(someGuestId),
-                    Times.Once);
-
-            this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -70,7 +71,7 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
                 new GuestServiceException(failedGuestServiceException);
 
             this.storageBrokerMock.Setup(broker =>
-                broker.SelectGuestByIdAsync(someGuestId))
+                broker.SelectGuestByIdAsync(It.IsAny<Guid>()))
                     .ThrowsAsync(serviceException);
 
             // when
@@ -85,18 +86,18 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
             actualGuestServiceException.Should().BeEquivalentTo(
                 expectedGuestServiceException);
 
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectGuestByIdAsync(someGuestId),
+                    Times.Once);
+
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedGuestServiceException))),
                         Times.Once);
 
-            this.storageBrokerMock.Verify(broker =>
-                broker.SelectGuestByIdAsync(someGuestId),
-                    Times.Once);
-
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
-
     }
 }

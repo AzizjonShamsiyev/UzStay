@@ -47,6 +47,7 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
         
         [Fact]
@@ -89,6 +90,7 @@ namespace UzStay.Api.Tests.Unit.Services.Foundations.Guests
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
